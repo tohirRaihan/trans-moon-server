@@ -31,8 +31,6 @@ async function run() {
         // GET services API
         app.get('/services', async (req, res) => {
             const cursor = serviceCollection.find({});
-            const count = await cursor.count();
-
             const services = await cursor.toArray();
 
             res.send(services);
