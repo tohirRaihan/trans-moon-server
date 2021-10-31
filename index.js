@@ -32,7 +32,6 @@ async function run() {
         app.get('/services', async (req, res) => {
             const cursor = serviceCollection.find({});
             const services = await cursor.toArray();
-
             res.send(services);
         });
 
@@ -45,6 +44,13 @@ async function run() {
         });
 
         // ---------------------------Orders API---------------------------
+        // GET orders
+        app.get('/orders', async (req, res) => {
+            const cursor = orderCollection.find({});
+            const services = await cursor.toArray();
+            res.send(services);
+        });
+
         // FIND orders by a user id
         app.get('/orders/:userId', async (req, res) => {
             const userId = req.params.userId;
