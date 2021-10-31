@@ -43,6 +43,15 @@ async function run() {
             res.send(result);
         });
 
+        // CREATE service
+        app.post('/services', async (req, res) => {
+            console.log(req.body);
+            const newService = req.body;
+            console.log(newService);
+            const result = await serviceCollection.insertOne(newService);
+            res.json(result);
+        });
+
         // ---------------------------Orders API---------------------------
         // GET orders
         app.get('/orders', async (req, res) => {
