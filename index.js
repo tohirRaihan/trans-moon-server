@@ -25,8 +25,9 @@ async function run() {
         await client.connect();
         const database = client.db('trans_moon');
         const serviceCollection = database.collection('services');
-
-        // GET services API
+        const orderCollection = database.collection('orders');
+        // --------------------------Services API--------------------------
+        // GET services
         app.get('/services', async (req, res) => {
             const cursor = serviceCollection.find({});
             const services = await cursor.toArray();
@@ -34,12 +35,27 @@ async function run() {
             res.send(services);
         });
 
-        // Find one service API
+        // Find one service
         app.get('/services/:id', async (req, res) => {
             const serviceId = req.params.id;
             const query = { _id: ObjectId(serviceId) };
             const result = await serviceCollection.findOne(query);
             res.send(result);
+        });
+
+        // ---------------------------Orders API---------------------------
+        // GET orders
+
+        // CREATE order
+        app.post('/orders', async (req, res) => {
+            console.log(req.body);
+            const newOrder = req.body;
+            console.log(newOrder);
+            const result = await orderCollection.insertOne(newOrder);
+            res.json(result);
+            console.log(
+                `A document was inserted with the _id: ${result.insertedId}`
+            );
         });
     } finally {
         // await client.close();
