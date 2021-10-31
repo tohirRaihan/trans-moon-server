@@ -45,9 +45,13 @@ async function run() {
         });
 
         // ---------------------------Orders API---------------------------
-        // GET orders
-        app.get('/orders', async (req, res) => {
-            const cursor = orderCollection.find({});
+        // FIND orders by a user id
+        app.get('/orders/:userId', async (req, res) => {
+            const userId = req.params.userId;
+            console.log(userId);
+            const query = { userId: userId };
+            console.log(query);
+            const cursor = orderCollection.find(query);
             const orders = await cursor.toArray();
             res.send(orders);
         });
