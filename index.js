@@ -26,6 +26,7 @@ async function run() {
         const database = client.db('trans_moon');
         const serviceCollection = database.collection('services');
         const orderCollection = database.collection('orders');
+
         // --------------------------Services API--------------------------
         // GET services
         app.get('/services', async (req, res) => {
@@ -45,6 +46,11 @@ async function run() {
 
         // ---------------------------Orders API---------------------------
         // GET orders
+        app.get('/orders', async (req, res) => {
+            const cursor = orderCollection.find({});
+            const orders = await cursor.toArray();
+            res.send(orders);
+        });
 
         // CREATE order
         app.post('/orders', async (req, res) => {
@@ -53,9 +59,6 @@ async function run() {
             console.log(newOrder);
             const result = await orderCollection.insertOne(newOrder);
             res.json(result);
-            console.log(
-                `A document was inserted with the _id: ${result.insertedId}`
-            );
         });
     } finally {
         // await client.close();
