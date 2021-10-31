@@ -4,6 +4,7 @@ require('dotenv').config();
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 5000;
+const ObjectId = require('mongodb').ObjectId;
 
 // middleware
 app.use(cors());
@@ -19,12 +20,9 @@ const client = new MongoClient(uri, {
     useUnifiedTopology: true
 });
 
-console.log(uri);
-
 async function run() {
     try {
         await client.connect();
-        console.log('database connecteed successfully');
         const database = client.db('trans_moon');
         const serviceCollection = database.collection('services');
 
@@ -34,6 +32,14 @@ async function run() {
             const services = await cursor.toArray();
 
             res.send(services);
+        });
+
+        // Find one service API
+        app.get('/services/:id', async (req, res) => {
+            const serviceId = req.params.id;
+            const query = { _id: ObjectId(serviceId) };
+            const result = await serviceCollection.findOne(query);
+            res.send(result);
         });
     } finally {
         // await client.close();
